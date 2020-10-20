@@ -1,32 +1,55 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div>
+    <h3>TODO APP VUE 2</h3>
+    <form @submit.prevent="processForm">
+      <label>NEW TODO</label>
+      <input type="text" v-model="newtodo" />
+      <button type="submit">ADD TODO</button>
+    </form>
+    <button @click="deleteAll">DELETE ALL</button>
+    <h3>LIST TODO</h3>
+    <ul>
+      <li v-for="(item, index) in todos" :key="index">
+        <label :class="{ done: item.done }" @click="toggleDone(item)">{{
+          item.newtodo
+        }}</label>
+        <button @click="remove(index)">X</button>
+      </li>
+    </ul>
   </div>
 </template>
+<script>
+import { ref } from "vue";
+export default {
+  data() {
+    return {
+      newtodo: null,
+      todos: [],
+    };
+  },
+  methods: {
+    processForm() {
+      this.todos.push({
+        done: false,
+        newtodo: this.newtodo,
+      });
+      this.$set(this, "newtodo", null);
+    },
+    deleteAll() {
+      this.$set(this, "todos", []);
+    },
+    toggleDone(todo) {
+      todo.done = !todo.done;
+    },
+    remove(index) {
+      this.todos.splice(index, 1);
+    },
+  },
+};
+</script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.done {
+  color: red;
 }
 </style>
